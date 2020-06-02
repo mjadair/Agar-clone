@@ -20,8 +20,8 @@ function draw() {
   context.setTransform(1, 0, 0, 1, 0, 0)
 
 
-    //wipes the entire canvas out every time draw is called (every new frame)
-    context.clearRect(0, 0, canvas.width, canvas.height)
+  //wipes the entire canvas out every time draw is called (every new frame)
+  context.clearRect(0, 0, canvas.width, canvas.height)
 
 
   //clamp the viewport to the camera
