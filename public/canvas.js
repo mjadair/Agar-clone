@@ -37,15 +37,19 @@ canvas.addEventListener('mousemove', (event) => {
   if (angleDeg >= 0 && angleDeg < 90) {
     xVector = 1 - (angleDeg / 90)
     yVector = -(angleDeg / 90)
+    console.log('The mouse is in the lower right quadrant, relative to the centre')
   } else if (angleDeg >= 90 && angleDeg <= 180) {
     xVector = -(angleDeg - 90) / 90
     yVector = -(1 - ((angleDeg - 90) / 90))
+    console.log('The mouse is in the lower left quadrant, relative to the centre')
   } else if (angleDeg >= -180 && angleDeg < -90) {
     xVector = (angleDeg + 90) / 90
     yVector = (1 + ((angleDeg + 90) / 90))
+    console.log('The mouse is in the upper left quadrant, relative to the centre')
   } else if (angleDeg < 0 && angleDeg >= -90) {
     xVector = (angleDeg + 90) / 90
     yVector = (1 - ((angleDeg + 90) / 90))
+    console.log('The mouse is in the upper right quadrant, relative to the centre')
   }
 
   speed = 10
