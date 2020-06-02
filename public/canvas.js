@@ -1,19 +1,4 @@
-function init() {
-  draw()
-  console.log(orbs)
-}
-
-
-
-
-player.locX = Math.floor(500 * Math.random() + 10)
-player.locY = Math.floor(500 * Math.random() + 10)
-
-
 function draw() {
-
-
-
 
   //this resets the translation (below) 
   //look at the Mozilla docs on skewing, arguments are vertical and horizontal scaloing and skewing
@@ -50,13 +35,6 @@ function draw() {
     context.arc(orb.locX, orb.locY, orb.radius, 0, Math.PI * 2)
     context.fill()
   })
-
-
-
-
-
-
-
 
   requestAnimationFrame(draw)
 }
