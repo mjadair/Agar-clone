@@ -1,16 +1,35 @@
 function init() {
   draw()
+  console.log(orbs)
 }
 
 
 
 
-const randomX = Math.floor(500 * Math.random() + 10)
-const randomY = Math.floor(500 * Math.random() + 10)
+player.locX = Math.floor(500 * Math.random() + 10)
+player.locY = Math.floor(500 * Math.random() + 10)
 
-console.log(randomX, randomY)
 
 function draw() {
+
+
+
+
+  //this resets the translation (below) 
+  //look at the Mozilla docs on skewing, arguments are vertical and horizontal scaloing and skewing
+  context.setTransform(1, 0, 0, 1, 0, 0)
+
+
+    //wipes the entire canvas out every time draw is called (every new frame)
+    context.clearRect(0, 0, canvas.width, canvas.height)
+
+
+  //clamp the viewport to the camera
+  const camX = -player.locX + canvas.width / 2
+  const camY = -player.locY + canvas.height / 2
+  context.translate(camX, camY)
+
+
   context.beginPath()
   context.fillStyle = 'rgb(255,0,0)'
 
@@ -18,11 +37,27 @@ function draw() {
   //the third argument is the radius of the circle
   //the 4th aguments is the starting angle
   //the 5th argument is where to stop (PI *2 will give a full circumference)
-  context.arc(randomX, randomY, 10, 0, Math.PI * 2)
+  context.arc(player.locX, player.locY, 10, 0, Math.PI * 2)
   context.fill()
   context.lineWidth = 3
   context.strokeStyle = 'rgb(0,255,0)'
   context.stroke()
+
+
+  orbs.forEach((orb) => {
+    context.beginPath()
+    context.fillStyle = orb.color
+    context.arc(orb.locX, orb.locY, orb.radius, 0, Math.PI * 2)
+    context.fill()
+  })
+
+
+
+
+
+
+
+
   requestAnimationFrame(draw)
 }
 
