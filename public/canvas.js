@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 function draw() {
 
   //this resets the translation (below) 
@@ -15,20 +16,30 @@ function draw() {
   context.translate(camX, camY)
 
 
-  context.beginPath()
-  context.fillStyle = 'rgb(255,0,0)'
 
   //arc takes the x and y co-ordinates of the centre of the arc
   //the third argument is the radius of the circle
   //the 4th aguments is the starting angle
   //the 5th argument is where to stop (PI *2 will give a full circumference)
-  context.arc(player.locX, player.locY, 10, 0, Math.PI * 2)
-  context.fill()
-  context.lineWidth = 3
-  context.strokeStyle = 'rgb(0,255,0)'
-  context.stroke()
 
 
+
+  //draws all the players
+  players.forEach((p) => {
+
+    context.beginPath()
+    context.fillStyle = p.color
+    context.arc(p.locX, p.locY, 10, 0, Math.PI * 2)
+    context.fill()
+    context.lineWidth = 3
+    context.strokeStyle = 'rgb(0,255,0)'
+    context.stroke()
+
+  })
+
+
+
+  //draws all the orbs
   orbs.forEach((orb) => {
     context.beginPath()
     context.fillStyle = orb.color
@@ -66,15 +77,15 @@ canvas.addEventListener('mousemove', (event) => {
   }
 
   speed = 10
-  xV = xVector
-  yV = yVector
+  player.xVector = xVector
+  player.yVector = yVector
 
-  if ((player.locX < 5 && player.xVector < 0) || (player.locX > 500) && (xV > 0)) {
-    player.locY -= speed * yV
-  } else if ((player.locY < 5 && yV > 0) || (player.locY > 500) && (yV < 0)) {
-    player.locX += speed * xV
+  if ((player.locX < 5 && player.xVector < 0) || (player.locX > 500) && (xVector > 0)) {
+    player.locY -= speed * yVector
+  } else if ((player.locY < 5 && yVector > 0) || (player.locY > 500) && (yVector < 0)) {
+    player.locX += speed * xVector
   } else {
-    player.locX += speed * xV
-    player.locY -= speed * yV
+    player.locX += speed * xVector
+    player.locY -= speed * yVector
   }
 })

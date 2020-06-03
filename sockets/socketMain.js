@@ -23,16 +23,19 @@ let settings = {
 
 initGame()
 
+setInterval(() => {
+  io.to('game').emit('tock', {
+    players
+  })
+}, 33)
 
 io.sockets.on('connect', (socket) => {
-  let player = {}
 
   socket.on('init', (data) => {
 
 
+    socket.join('game')
 
-
-    console.log('this is data', data)
 
     let playerConfig = new PlayerConfig(settings)
     let playerData = new PlayerData(data.playerName, settings)

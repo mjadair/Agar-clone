@@ -1,4 +1,4 @@
-  
+
 let socket = io.connect('http://localhost:8000')
 // let orbs = []
 
@@ -13,7 +13,7 @@ function init() {
   })
 
 
-  
+
 
 }
 
@@ -22,8 +22,12 @@ function init() {
 
 socket.on('initReturn', (data) => {
   orbs = data.orbs
-  
-  
+
+
+})
+
+socket.on('tock', (data) => {
+  players = data.players
 })
 
 
