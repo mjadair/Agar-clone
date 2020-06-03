@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const io = require('../servers').io
 
 
@@ -23,13 +24,10 @@ let settings = {
 
 initGame()
 
-setInterval(() => {
-  io.to('game').emit('tock', {
-    players
-  })
-}, 33)
+
 
 io.sockets.on('connect', (socket) => {
+  let player = {}
 
   socket.on('init', (data) => {
 
@@ -39,7 +37,21 @@ io.sockets.on('connect', (socket) => {
 
     let playerConfig = new PlayerConfig(settings)
     let playerData = new PlayerData(data.playerName, settings)
-    let player = new Player(socket.id, playerConfig, playerData)
+    player = new Player(socket.id, playerConfig, playerData)
+
+
+
+    
+    setInterval(() => {
+      io.to('game').emit('tock', {
+        players, 
+        playerX: player.playerData.locX,
+        playerY: player.playerData.locY
+      })
+    }, 33)
+
+
+
 
     socket.emit('initReturn', {
       orbs
@@ -49,6 +61,22 @@ io.sockets.on('connect', (socket) => {
 
   })
 
+
+
+  socket.on('tick', (data) => { 
+    speed = player.playerConfig.speed
+    xVector = player.playerConfig.xVector = data.xVector
+    yVector = player.playerConfig.yVector = data.yVector
+
+    if ((player.playerData.locX < 5 && player.playerData.xVector < 0) || (player.playerData.locX > 500) && (xVector > 0)) {
+      player.playerData.locY -= speed * yVector
+    } else if ((player.playerData.locY < 5 && yVector > 0) || (player.playerData.locY > 500) && (yV < 0)) {
+      player.playerData.locX += speed * xVector
+    } else {
+      player.playerData.locX += speed * xVector
+      player.playerData.locY -= speed * yVector
+    }
+  })
 
 })
 

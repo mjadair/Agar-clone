@@ -76,16 +76,8 @@ canvas.addEventListener('mousemove', (event) => {
     console.log('The mouse is in the upper right quadrant, relative to the centre')
   }
 
-  speed = 10
   player.xVector = xVector
   player.yVector = yVector
 
-  if ((player.locX < 5 && player.xVector < 0) || (player.locX > 500) && (xVector > 0)) {
-    player.locY -= speed * yVector
-  } else if ((player.locY < 5 && yVector > 0) || (player.locY > 500) && (yVector < 0)) {
-    player.locX += speed * xVector
-  } else {
-    player.locX += speed * xVector
-    player.locY -= speed * yVector
-  }
+
 })
