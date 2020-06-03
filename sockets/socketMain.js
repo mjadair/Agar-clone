@@ -1,5 +1,7 @@
 /* eslint-disable no-undef */
 const io = require('../servers').io
+const checkForOrbCollisions = require('./checkCollisions').checkForOrbCollisions
+const checkForPlayerCollisions = require('./checkCollisions').checkForPlayerCollisions
 
 
 const Orb = require('./classes/orb')
@@ -13,12 +15,12 @@ let orbs = []
 
 
 let settings = {
-  defaultOrbs: 500,
+  defaultOrbs: 5000,
   defaultSpeed: 6,
   defaultSize: 6,
   defaultZoom: 1.5,
-  worldWidth: 500,
-  worldHeight: 500
+  worldWidth: 5000,
+  worldHeight: 5000
 }
 
 
@@ -41,10 +43,10 @@ io.sockets.on('connect', (socket) => {
 
 
 
-    
+
     setInterval(() => {
       io.to('game').emit('tock', {
-        players, 
+        players,
         playerX: player.playerData.locX,
         playerY: player.playerData.locY
       })
@@ -59,24 +61,41 @@ io.sockets.on('connect', (socket) => {
 
     players.push(playerData)
 
+
+
+    socket.on('tick', (data) => {
+      speed = player.playerConfig.speed
+      xVector = player.playerConfig.xVector = data.xVector
+      yVector = player.playerConfig.yVector = data.yVector
+
+      if ((player.playerData.locX < 5 && player.playerData.xVector < 0) || (player.playerData.locX > settings.worldWidth) && (xVector > 0)) {
+        player.playerData.locY -= speed * yVector
+      } else if ((player.playerData.locY < 5 && yVector > 0) || (player.playerData.locY > settings.worldHeight) && (yVector < 0)) {
+        player.playerData.locX += speed * xVector
+      } else {
+        player.playerData.locX += speed * xVector
+        player.playerData.locY -= speed * yVector
+      }
+      let capturedOrb = checkForOrbCollisions(player.playerData, player.playerConfig, orbs, settings)
+      capturedOrb.then(() => {
+        const orbData = {
+          orbIndex: data,
+          newOrb: orbs(data)
+        }
+        io.sockets.emit('orbSwitch', orbData)
+
+      }).catch(() => {
+        //need a catch handler for unresolved promise
+      })
+    })
+
+
   })
 
 
 
-  socket.on('tick', (data) => { 
-    speed = player.playerConfig.speed
-    xVector = player.playerConfig.xVector = data.xVector
-    yVector = player.playerConfig.yVector = data.yVector
 
-    if ((player.playerData.locX < 5 && player.playerData.xVector < 0) || (player.playerData.locX > 500) && (xVector > 0)) {
-      player.playerData.locY -= speed * yVector
-    } else if ((player.playerData.locY < 5 && yVector > 0) || (player.playerData.locY > 500) && (yV < 0)) {
-      player.playerData.locX += speed * xVector
-    } else {
-      player.playerData.locX += speed * xVector
-      player.playerData.locY -= speed * yVector
-    }
-  })
+
 
 })
 

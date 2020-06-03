@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 
 let socket = io.connect('http://localhost:8000')
 // let orbs = []
@@ -34,9 +35,13 @@ socket.on('initReturn', (data) => {
 
 socket.on('tock', (data) => {
   players = data.players
-  console.log(data.playerX, data.playerY)
-  player.locX = data.playerX
-  player.locY = data.playerY
+  // console.log(data)
+  player.locX = data.xVector
+  player.locY = data.yVector
+})
+
+socket.on('orbSwitch', (data) => {
+  orbs.splice(data.orbIndex, 1, data.newOrb)
 })
 
 

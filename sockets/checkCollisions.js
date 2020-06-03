@@ -1,5 +1,5 @@
 const Orb = require('./classes/Orb')
-const io = require('../servers').io;
+const io = require('../servers').io
 
 function checkForOrbCollisions(pData, pConfig, orbs, settings) {
   return new Promise((resolve, reject) => {
@@ -15,20 +15,20 @@ function checkForOrbCollisions(pData, pConfig, orbs, settings) {
         distance = Math.sqrt(
           ((pData.locX - orb.locX) * (pData.locX - orb.locX)) +
           ((pData.locY - orb.locY) * (pData.locY - orb.locY))
-        );
+        )
         if (distance < pData.radius + orb.radius) {
           //COLLISION!!!
-          pData.score += 1;
-          pData.orbsAbsorbed += 1;
+          pData.score += 1
+          pData.orbsAbsorbed += 1
           // pData.color = orb.color;
           if (pConfig.zoom > 1) {
-            pConfig.zoom -= .001;
+            pConfig.zoom -= .001
           }
-          pData.radius += 0.25;
+          pData.radius += 0.25
           if (pConfig.speed < -0.005) {
-            pConfig.speed += 0.005;
+            pConfig.speed += 0.005
           } else if (pConfig.speed > 0.005) {
-            pConfig.speed -= 0.005;
+            pConfig.speed -= 0.005
           }
           // we have to keep orbs updated for new players
           // we just dont want to push them out more than we have to
@@ -37,11 +37,11 @@ function checkForOrbCollisions(pData, pConfig, orbs, settings) {
           resolve(i)
         }
       }
-    });
+    })
     // if we got out of the loop, there was no collision.
     // Reject promise
     reject()
-  });
+  })
 }
 
 function checkForPlayerCollisions(pData, pConfig, players, playerId) {
@@ -62,45 +62,45 @@ function checkForPlayerCollisions(pData, pConfig, players, playerId) {
           distance = Math.sqrt(
             ((pData.locX - pLocx) * (pData.locX - pLocx)) +
             ((pData.locY - pLocy) * (pData.locY - pLocy))
-          );
+          )
           if (distance < pData.radius + pR) {
             //COLLISION!!  
             if (pData.radius > pR) {
               // ENEMY DEATH
-              let collisionData = updateScores(pData, curPlayer);
+              let collisionData = updateScores(pData, curPlayer)
               if (pConfig.zoom > 1) {
-                pConfig.zoom -= (pR * 0.25) * .001;
+                pConfig.zoom -= (pR * 0.25) * .001
               }
-              players.splice(i, 1);
-              resolve(collisionData);
+              players.splice(i, 1)
+              resolve(collisionData)
 
             }
-            // else if(pData.radius < pR){           
-            //     let collisionData = updateScores(curPlayer,pData);
-            //     players.forEach((p,i)=>{
-            //         console.log(players[i].name, i)
-            //         if (pData.uid == p.uid){
-            //             players.splice(i, 1);
-            //         }
-            //     }); 
-            //     resolve(collisionData);
-            // }
+            else if (pData.radius < pR) {
+              let collisionData = updateScores(curPlayer, pData)
+              players.forEach((p, i) => {
+                console.log(players[i].name, i)
+                if (pData.uid == p.uid) {
+                  players.splice(i, 1)
+                }
+              })
+              resolve(collisionData)
+            }
           }
         }
       }
     })
-    reject();
-  });
+    reject()
+  })
 }
 
 function updateScores(killer, killed) {
-  killer.score += (killed.score + 10);
-  killer.playersAbsorbed += 1;
-  killed.alive = false;
+  killer.score += (killed.score + 10)
+  killer.playersAbsorbed += 1
+  killed.alive = false
   killer.radius += (killed.radius * 0.25)
   return {
     died: killed,
-    killedBy: killer,
+    killedBy: killer
   }
 }
 
