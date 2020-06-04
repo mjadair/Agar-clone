@@ -1,6 +1,9 @@
+//use uuid to create a random string. There are security issues from using the socket id
+const uuidv4 = require('uuid/v4')
+
 class PlayerData {
   constructor(playerName, settings) {
-
+    this.uid = uuidv4()
     this.name = playerName
     this.locX = Math.floor(settings.worldWidth * Math.random() + 10)
     this.locY = Math.floor(settings.worldHeight * Math.random() + 10)

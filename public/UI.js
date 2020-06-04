@@ -7,7 +7,7 @@ let players = []
 const canvas = document.querySelector('#the-canvas')
 const context = canvas.getContext('2d')
 
-canvas.width = wWidth
+canvas.width = wWidth 
 canvas.height = wHeight
 
 $(window).load(() => {
