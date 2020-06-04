@@ -13,9 +13,6 @@ function init() {
     playerName: player.name
   })
 
-
-
-
 }
 
 
@@ -34,14 +31,17 @@ socket.on('initReturn', (data) => {
 })
 
 socket.on('tock', (data) => {
-  players = data.players
-  // console.log(data)
-  player.locX = data.xVector
-  player.locY = data.yVector
+  players = data.players 
 })
 
 socket.on('orbSwitch', (data) => {
   orbs.splice(data.orbIndex, 1, data.newOrb)
+})
+
+
+socket.on('tickTock', (data) => {
+  player.locX = data.xVector
+  player.locY = data.yVector
 })
 
 

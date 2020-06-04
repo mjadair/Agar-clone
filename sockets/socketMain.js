@@ -28,6 +28,15 @@ initGame()
 
 
 
+setInterval(() => {
+  if (players.length > 0) {
+    io.to('game').emit('tock', {
+      players
+    })
+  }
+}, 33)
+
+
 io.sockets.on('connect', (socket) => {
   let player = {}
 
@@ -45,7 +54,7 @@ io.sockets.on('connect', (socket) => {
 
 
     setInterval(() => {
-      io.to('game').emit('tock', {
+      socket.emit('tickTock', {
         players,
         playerX: player.playerData.locX,
         playerY: player.playerData.locY
@@ -76,6 +85,9 @@ io.sockets.on('connect', (socket) => {
         player.playerData.locX += speed * xVector
         player.playerData.locY -= speed * yVector
       }
+
+
+
       let capturedOrb = checkForOrbCollisions(player.playerData, player.playerConfig, orbs, settings)
       capturedOrb.then(() => {
         const orbData = {
@@ -88,6 +100,19 @@ io.sockets.on('connect', (socket) => {
         //need a catch handler for unresolved promise
       })
     })
+
+    //player collision
+    let playerDeath = checkForPlayerCollisions(player.playerData, player.playerConfig, players)
+    playerDeath.then(() => {
+
+
+
+    }).catch(() => {
+
+    })
+
+
+
 
 
   })
