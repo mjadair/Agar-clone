@@ -102,7 +102,7 @@ io.sockets.on('connect', (socket) => {
     })
 
     //player collision
-    let playerDeath = checkForPlayerCollisions(player.playerData, player.playerConfig, players)
+    let playerDeath = checkForPlayerCollisions(player.playerData, player.playerConfig, players, player.socketId)
     playerDeath.then(() => {
 
 
